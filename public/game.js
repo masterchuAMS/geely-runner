@@ -32,64 +32,76 @@ const achievementYear = document.getElementById('achievement-year');
 // Достижения Geely по годам
 const geelyAchievements = [
     {
+        year: 2025,
+        icon: '🏆',
+        number: 'Geely Atlas',
+        text: 'Лучший среднеразмерный полноприводный кроссовер — «За рулём»'
+    },
+    {
+        year: 2025,
+        icon: '🥇',
+        number: 'Geely Emgrand',
+        text: 'Победитель в категории «Компактные легковые автомобили»'
+    },
+    {
+        year: 2025,
+        icon: '🏅',
+        number: 'Geely Preface',
+        text: 'Лучший в номинации «Средние и большие легковые автомобили»'
+    },
+    {
+        year: 2025,
+        icon: '⭐',
+        number: 'Geely Cityray',
+        text: 'Лидер в категории «Среднеразмерный переднеприводный кроссовер»'
+    },
+    {
+        year: 2025,
+        icon: '🏆',
+        number: 'Geely Monjaro',
+        text: '«Внедорожник года 2025» среди среднеразмерных SUV'
+    },
+    {
+        year: 2025,
+        icon: '🥇',
+        number: 'Geely Coolray',
+        text: '2 года подряд лучший компактный моноприводный кроссовер!'
+    },
+    {
         year: 2024,
         icon: '🚗',
-        number: '2.17 млн',
-        text: 'автомобилей продано по всему миру'
+        number: '75 000+',
+        text: 'Geely Atlas продано за 2 года — лидер сегмента!'
+    },
+    {
+        year: 2024,
+        icon: '🏆',
+        number: 'Авторевю',
+        text: 'Победа Geely Atlas в рейтинг-тесте издания'
+    },
+    {
+        year: 2024,
+        icon: '⭐',
+        number: 'ТОП-5 АВТО',
+        text: 'Geely Atlas — «Автомобиль года 2024»'
+    },
+    {
+        year: 2023,
+        icon: '🥇',
+        number: 'AUTOSTAT',
+        text: 'Geely Atlas — «Новинка года» AUTOSTAT Awards 2023'
+    },
+    {
+        year: 2023,
+        icon: '🏅',
+        number: 'Авто.ру',
+        text: 'Титул «Новинка года» в России'
     },
     {
         year: 2024,
         icon: '🌍',
         number: '60+',
         text: 'стран — география экспорта Geely'
-    },
-    {
-        year: 2024,
-        icon: '⚡',
-        number: '690 000',
-        text: 'электромобилей и гибридов продано'
-    },
-    {
-        year: 2023,
-        icon: '🏭',
-        number: '10+',
-        text: 'заводов по производству автомобилей'
-    },
-    {
-        year: 2023,
-        icon: '🔬',
-        number: '30 000+',
-        text: 'инженеров в R&D центрах'
-    },
-    {
-        year: 2022,
-        icon: '🏆',
-        number: 'ТОП-10',
-        text: 'крупнейших автопроизводителей мира'
-    },
-    {
-        year: 2021,
-        icon: '🚀',
-        number: '1.32 млн',
-        text: 'автомобилей — рекорд продаж'
-    },
-    {
-        year: 2020,
-        icon: '🌱',
-        number: '2045',
-        text: 'год — цель углеродной нейтральности'
-    },
-    {
-        year: 2019,
-        icon: '✈️',
-        number: 'Volvo',
-        text: 'полная интеграция с Volvo Cars'
-    },
-    {
-        year: 2017,
-        icon: '🚙',
-        number: 'Lynk & Co',
-        text: 'запуск нового бренда'
     }
 ];
 
@@ -241,6 +253,10 @@ function showAchievement(meters) {
 // Продолжить игру после достижения
 function continueGame() {
     achievementScreen.classList.add('hidden');
+    
+    // Убираем все сугробы рядом с машиной чтобы не было мгновенной аварии
+    clearNearbyObstacles();
+    
     gameState.isPaused = false;
     gameState.lastTime = performance.now();
     requestAnimationFrame(gameLoop);
@@ -248,6 +264,23 @@ function continueGame() {
     if (tg?.HapticFeedback) {
         tg.HapticFeedback.impactOccurred('light');
     }
+}
+
+// Очистить сугробы рядом с машиной
+function clearNearbyObstacles() {
+    const carRect = playerCar.getBoundingClientRect();
+    const safeZone = 150; // Зона безопасности в пикселях
+    
+    gameState.obstacles = gameState.obstacles.filter(obstacle => {
+        const obstacleRect = obstacle.element.getBoundingClientRect();
+        // Если сугроб в опасной зоне - удаляем
+        if (obstacleRect.bottom > carRect.top - safeZone && 
+            obstacleRect.top < carRect.bottom + safeZone) {
+            obstacle.element.remove();
+            return false;
+        }
+        return true;
+    });
 }
 
 // Главный игровой цикл
@@ -262,9 +295,9 @@ function gameLoop(timestamp) {
     gameState.distance += metersPerSecond * (deltaTime / 1000);
     distanceDisplay.textContent = Math.floor(gameState.distance);
     
-    // Проверяем достижение 1000 метров
-    const currentMilestone = Math.floor(gameState.distance / 1000) * 1000;
-    if (currentMilestone > gameState.lastMilestone && currentMilestone >= 1000) {
+    // Проверяем достижение каждые 250 метров
+    const currentMilestone = Math.floor(gameState.distance / 250) * 250;
+    if (currentMilestone > gameState.lastMilestone && currentMilestone >= 250) {
         gameState.lastMilestone = currentMilestone;
         showAchievement(currentMilestone);
         return; // Пауза игры

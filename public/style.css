@@ -100,6 +100,12 @@ html, body {
     transition: transform 0.2s, box-shadow 0.2s;
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 200px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .btn-play:hover, .btn-play:active {
