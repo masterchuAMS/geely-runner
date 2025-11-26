@@ -615,6 +615,7 @@ html, body {
 .gameover-content {
     text-align: center;
     padding: 20px;
+    padding-left: 40px;
     animation: fadeIn 0.5s ease-out;
     display: flex;
     flex-direction: column;
