@@ -28,6 +28,13 @@
             <h1>GEELY<br>RUNNER</h1>
             <p class="subtitle">Зимний Город</p>
         </div>
+        
+        <!-- Достижения Geely на стартовом экране -->
+        <div class="geely-facts-start">
+            <div class="fact-badge">🏆 2024: Продано 2.17 млн авто</div>
+            <div class="fact-badge">🌍 Экспорт в 60+ стран</div>
+        </div>
+        
         <button id="start-btn" class="btn-play">
             <span>ИГРАТЬ</span>
         </button>
@@ -37,6 +44,23 @@
         </div>
         <div class="high-score" id="high-score-display">
             Рекорд: <span id="record">0</span> м
+        </div>
+    </div>
+    
+    <!-- Экран достижений (показывается каждые 1000м) -->
+    <div id="achievement-screen" class="screen hidden">
+        <div class="achievement-content">
+            <div class="achievement-distance">
+                <span id="achievement-meters">1000</span> м
+            </div>
+            <div class="achievement-title">🏆 ДОСТИЖЕНИЕ GEELY</div>
+            <div class="achievement-fact" id="achievement-fact">
+                <!-- Факт будет вставлен через JS -->
+            </div>
+            <div class="achievement-year" id="achievement-year">2024</div>
+            <button id="continue-btn" class="btn-play">
+                <span>ПРОДОЛЖИТЬ</span>
+            </button>
         </div>
     </div>
 

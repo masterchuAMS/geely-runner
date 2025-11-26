@@ -9,9 +9,11 @@ if (tg) {
 const startScreen = document.getElementById('start-screen');
 const gameScreen = document.getElementById('game-screen');
 const gameoverScreen = document.getElementById('gameover-screen');
+const achievementScreen = document.getElementById('achievement-screen');
 const startBtn = document.getElementById('start-btn');
 const restartBtn = document.getElementById('restart-btn');
 const shareBtn = document.getElementById('share-btn');
+const continueBtn = document.getElementById('continue-btn');
 const btnLeft = document.getElementById('btn-left');
 const btnRight = document.getElementById('btn-right');
 const playerCar = document.getElementById('player-car');
@@ -23,6 +25,73 @@ const finalSpeed = document.getElementById('final-speed');
 const recordDisplay = document.getElementById('record');
 const newRecordBanner = document.getElementById('new-record');
 const gameContainer = document.getElementById('game-container');
+const achievementFact = document.getElementById('achievement-fact');
+const achievementMeters = document.getElementById('achievement-meters');
+const achievementYear = document.getElementById('achievement-year');
+
+// Достижения Geely по годам
+const geelyAchievements = [
+    {
+        year: 2024,
+        icon: '🚗',
+        number: '2.17 млн',
+        text: 'автомобилей продано по всему миру'
+    },
+    {
+        year: 2024,
+        icon: '🌍',
+        number: '60+',
+        text: 'стран — география экспорта Geely'
+    },
+    {
+        year: 2024,
+        icon: '⚡',
+        number: '690 000',
+        text: 'электромобилей и гибридов продано'
+    },
+    {
+        year: 2023,
+        icon: '🏭',
+        number: '10+',
+        text: 'заводов по производству автомобилей'
+    },
+    {
+        year: 2023,
+        icon: '🔬',
+        number: '30 000+',
+        text: 'инженеров в R&D центрах'
+    },
+    {
+        year: 2022,
+        icon: '🏆',
+        number: 'ТОП-10',
+        text: 'крупнейших автопроизводителей мира'
+    },
+    {
+        year: 2021,
+        icon: '🚀',
+        number: '1.32 млн',
+        text: 'автомобилей — рекорд продаж'
+    },
+    {
+        year: 2020,
+        icon: '🌱',
+        number: '2045',
+        text: 'год — цель углеродной нейтральности'
+    },
+    {
+        year: 2019,
+        icon: '✈️',
+        number: 'Volvo',
+        text: 'полная интеграция с Volvo Cars'
+    },
+    {
+        year: 2017,
+        icon: '🚙',
+        number: 'Lynk & Co',
+        text: 'запуск нового бренда'
+    }
+];
 
 // Игровые константы
 const LANES = 3;
@@ -36,6 +105,7 @@ const OBSTACLE_HEIGHT = 45;
 // Игровое состояние
 let gameState = {
     isRunning: false,
+    isPaused: false,
     currentLane: 1, // 0 = левая, 1 = центр, 2 = правая
     distance: 0,
     speed: 60,
@@ -46,7 +116,9 @@ let gameState = {
     lastTime: 0,
     highScore: parseInt(localStorage.getItem('geelyRunnerHighScore') || '0'),
     userId: tg?.initDataUnsafe?.user?.id || null,
-    userName: tg?.initDataUnsafe?.user?.first_name || 'Игрок'
+    userName: tg?.initDataUnsafe?.user?.first_name || 'Игрок',
+    lastMilestone: 0, // Последняя достигнутая отметка (1000, 2000, ...)
+    achievementIndex: 0 // Индекс текущего достижения
 };
 
 // Инициализация рекорда
@@ -139,9 +211,48 @@ function checkCollision(obstacle) {
              carRect.top + padding > obstacleRect.bottom - padding);
 }
 
+// Показать достижение Geely
+function showAchievement(meters) {
+    gameState.isPaused = true;
+    
+    // Получаем достижение
+    const achievement = geelyAchievements[gameState.achievementIndex % geelyAchievements.length];
+    gameState.achievementIndex++;
+    
+    // Заполняем контент
+    achievementMeters.textContent = meters;
+    achievementYear.textContent = achievement.year;
+    achievementFact.innerHTML = `
+        <span class="fact-icon">${achievement.icon}</span>
+        <span class="fact-number">${achievement.number}</span>
+        <span class="fact-text">${achievement.text}</span>
+    `;
+    
+    // Показываем экран
+    achievementScreen.classList.remove('hidden');
+    
+    // Haptic feedback
+    if (tg?.HapticFeedback) {
+        tg.HapticFeedback.notificationOccurred('success');
+    }
+    if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+}
+
+// Продолжить игру после достижения
+function continueGame() {
+    achievementScreen.classList.add('hidden');
+    gameState.isPaused = false;
+    gameState.lastTime = performance.now();
+    requestAnimationFrame(gameLoop);
+    
+    if (tg?.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred('light');
+    }
+}
+
 // Главный игровой цикл
 function gameLoop(timestamp) {
-    if (!gameState.isRunning) return;
+    if (!gameState.isRunning || gameState.isPaused) return;
     
     const deltaTime = timestamp - gameState.lastTime;
     gameState.lastTime = timestamp;
@@ -150,6 +261,14 @@ function gameLoop(timestamp) {
     const metersPerSecond = gameState.speed / 3.6; // км/ч в м/с
     gameState.distance += metersPerSecond * (deltaTime / 1000);
     distanceDisplay.textContent = Math.floor(gameState.distance);
+    
+    // Проверяем достижение 1000 метров
+    const currentMilestone = Math.floor(gameState.distance / 1000) * 1000;
+    if (currentMilestone > gameState.lastMilestone && currentMilestone >= 1000) {
+        gameState.lastMilestone = currentMilestone;
+        showAchievement(currentMilestone);
+        return; // Пауза игры
+    }
     
     // Постепенно увеличиваем скорость
     if (gameState.speed < 180) {
@@ -177,12 +296,15 @@ function gameLoop(timestamp) {
 function startGame() {
     // Сброс состояния
     gameState.isRunning = true;
+    gameState.isPaused = false;
     gameState.currentLane = 1;
     gameState.distance = 0;
     gameState.speed = 60;
     gameState.maxSpeed = 60;
     gameState.obstacles = [];
     gameState.lastTime = performance.now();
+    gameState.lastMilestone = 0;
+    gameState.achievementIndex = 0;
     
     // Очистка сугробов
     obstaclesContainer.innerHTML = '';
@@ -296,6 +418,7 @@ function shareResult() {
 startBtn.addEventListener('click', startGame);
 restartBtn.addEventListener('click', startGame);
 shareBtn.addEventListener('click', shareResult);
+continueBtn.addEventListener('click', continueGame);
 btnLeft.addEventListener('click', moveLeft);
 btnRight.addEventListener('click', moveRight);
 
