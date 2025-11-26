@@ -378,15 +378,51 @@ function startGame() {
     }
 }
 
+// Эффект столкновения
+function showCrashEffect() {
+    // Тряска экрана
+    gameContainer.classList.add('shake');
+    
+    // Вспышка
+    const flash = document.createElement('div');
+    flash.className = 'crash-flash';
+    gameContainer.appendChild(flash);
+    
+    // Частицы снега от удара
+    for (let i = 0; i < 12; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'crash-particle';
+        particle.style.left = playerCar.style.left;
+        particle.style.setProperty('--angle', (Math.random() * 360) + 'deg');
+        particle.style.setProperty('--distance', (50 + Math.random() * 80) + 'px');
+        particle.style.animationDelay = (Math.random() * 0.1) + 's';
+        gameContainer.appendChild(particle);
+    }
+    
+    // Машина трясётся
+    playerCar.classList.add('crashed');
+    
+    // Убираем эффекты через время
+    setTimeout(() => {
+        gameContainer.classList.remove('shake');
+        flash.remove();
+        playerCar.classList.remove('crashed');
+        document.querySelectorAll('.crash-particle').forEach(p => p.remove());
+    }, 800);
+}
+
 // Конец игры
 function gameOver() {
     gameState.isRunning = false;
+    
+    // Показать эффект столкновения
+    showCrashEffect();
     
     // Остановить спавн
     clearInterval(gameState.spawnInterval);
     
     // Вибрация
-    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 100]);
     if (tg?.HapticFeedback) {
         tg.HapticFeedback.notificationOccurred('error');
     }
