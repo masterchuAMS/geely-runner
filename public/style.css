@@ -149,7 +149,7 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    margin-bottom: 25px;
+    margin: 20px 0;
     animation: fadeIn 1s ease-out 0.5s both;
 }
 
@@ -162,6 +162,19 @@ html, body {
     color: var(--snow);
     text-align: center;
     backdrop-filter: blur(5px);
+}
+
+/* Фикс для стартового экрана */
+#start-screen {
+    gap: 0;
+}
+
+#start-screen .logo {
+    margin-bottom: 15px;
+}
+
+#start-screen .btn-play {
+    margin-top: 10px;
 }
 
 /* ==================== ЭКРАН ДОСТИЖЕНИЙ ==================== */
@@ -436,11 +449,11 @@ html, body {
 /* ==================== МАШИНА ИГРОКА ==================== */
 .car {
     position: absolute;
-    bottom: 80px;
+    bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
-    width: 70px;
-    height: 120px;
+    width: 55px;
+    height: 110px;
     z-index: 50;
     transition: left 0.15s ease-out;
 }
@@ -450,10 +463,12 @@ html, body {
     width: 100%;
     height: 100%;
     background-image: url('car.png');
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5));
+    /* Поворачиваем на 90 градусов чтобы нос был вверху */
+    transform: rotate(90deg);
 }
 
 /* Скрываем старые CSS элементы машины когда есть картинка */
