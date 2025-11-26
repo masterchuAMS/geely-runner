@@ -46,8 +46,39 @@ html, body {
 
 /* ==================== СТАРТОВЫЙ ЭКРАН ==================== */
 #start-screen {
-    background: linear-gradient(180deg, #0a1628 0%, #1a3a5c 50%, #2d5a7b 100%);
+    background: 
+        /* Снег сверху */
+        linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 20%),
+        /* Городской силуэт */
+        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><rect fill="%231a2634" x="0" y="80" width="30" height="120"/><rect fill="%23243342" x="35" y="60" width="25" height="140"/><rect fill="%231e2d3a" x="65" y="90" width="40" height="110"/><rect fill="%232a3f4f" x="110" y="40" width="35" height="160"/><rect fill="%231a2634" x="150" y="70" width="28" height="130"/><rect fill="%23243342" x="183" y="50" width="45" height="150"/><rect fill="%231e2d3a" x="233" y="85" width="32" height="115"/><rect fill="%232a3f4f" x="270" y="55" width="38" height="145"/><rect fill="%231a2634" x="313" y="75" width="30" height="125"/><rect fill="%23243342" x="348" y="65" width="52" height="135"/><rect fill="%23ffdc64" opacity="0.4" x="45" y="75" width="5" height="8"/><rect fill="%23ffdc64" opacity="0.3" x="120" y="55" width="5" height="8"/><rect fill="%23ffdc64" opacity="0.5" x="195" y="65" width="5" height="8"/><rect fill="%23ffdc64" opacity="0.3" x="280" y="70" width="5" height="8"/><rect fill="%23ffdc64" opacity="0.4" x="360" y="80" width="5" height="8"/></svg>') bottom center / cover no-repeat,
+        /* Градиент неба */
+        linear-gradient(180deg, #0a1628 0%, #162d4a 40%, #1a3a5c 70%, #2d5a7b 100%);
     padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Снежный эффект на стартовом экране */
+#start-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, white, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, white, transparent),
+        radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 160px 120px, white, transparent),
+        radial-gradient(2px 2px at 200px 50px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1px 1px at 250px 90px, white, transparent),
+        radial-gradient(2px 2px at 300px 60px, rgba(255,255,255,0.5), transparent);
+    background-size: 350px 150px;
+    animation: snowFall 8s linear infinite;
+    opacity: 0.6;
+    pointer-events: none;
 }
 
 .logo {
@@ -65,6 +96,16 @@ html, body {
     font-size: 80px;
     margin-bottom: 10px;
     filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+}
+
+.logo-image {
+    margin-bottom: 15px;
+}
+
+.logo-image img {
+    width: 150px;
+    height: auto;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
 }
 
 .logo h1 {
