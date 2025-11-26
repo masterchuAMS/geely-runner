@@ -448,8 +448,8 @@ html, body {
     bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
-    width: 55px;
-    height: 110px;
+    width: 70px;
+    height: 130px;
     z-index: 50;
     transition: left 0.15s ease-out;
 }
@@ -463,6 +463,8 @@ html, body {
     background-repeat: no-repeat;
     background-position: center;
     filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5));
+    /* Поворот на 90 градусов влево */
+    transform: rotate(-90deg);
 }
 
 /* Скрываем старые CSS элементы машины когда есть картинка */
