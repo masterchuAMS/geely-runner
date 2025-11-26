@@ -148,8 +148,8 @@ html, body {
 .geely-facts-start {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin: 20px 0;
+    gap: 6px;
+    margin: 15px 0;
     animation: fadeIn 1s ease-out 0.5s both;
 }
 
@@ -166,15 +166,11 @@ html, body {
 
 /* Фикс для стартового экрана */
 #start-screen {
-    gap: 0;
-}
-
-#start-screen .logo {
-    margin-bottom: 15px;
-}
-
-#start-screen .btn-play {
-    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
 /* ==================== ЭКРАН ДОСТИЖЕНИЙ ==================== */
@@ -463,12 +459,10 @@ html, body {
     width: 100%;
     height: 100%;
     background-image: url('car.png');
-    background-size: cover;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
     filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5));
-    /* Поворачиваем на 90 градусов чтобы нос был вверху */
-    transform: rotate(90deg);
 }
 
 /* Скрываем старые CSS элементы машины когда есть картинка */
