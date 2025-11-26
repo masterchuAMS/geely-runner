@@ -257,10 +257,21 @@ html, body {
 #continue-btn {
     background: linear-gradient(180deg, #4CAF50 0%, #388E3C 100%);
     box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4), inset 0 2px 0 rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 220px;
+    padding: 18px 40px;
 }
 
 #continue-btn:hover {
     box-shadow: 0 12px 35px rgba(76, 175, 80, 0.5);
+}
+
+#continue-btn span {
+    display: block;
+    text-align: center;
+    width: 100%;
 }
 
 /* ==================== СНЕЖИНКИ ==================== */
@@ -454,8 +465,8 @@ html, body {
     bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
-    width: 70px;
-    height: 130px;
+    width: 105px;
+    height: 195px;
     z-index: 50;
     transition: left 0.15s ease-out;
 }

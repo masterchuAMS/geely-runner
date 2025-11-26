@@ -298,6 +298,7 @@ function gameLoop(timestamp) {
     // Проверяем достижение каждые 250 метров
     const currentMilestone = Math.floor(gameState.distance / 250) * 250;
     if (currentMilestone > gameState.lastMilestone && currentMilestone >= 250) {
+        console.log('🏆 Достижение!', currentMilestone, 'м');
         gameState.lastMilestone = currentMilestone;
         showAchievement(currentMilestone);
         return; // Пауза игры
