@@ -1,0 +1,652 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --primary: #1a5fb4;
+    --primary-dark: #0d3a7a;
+    --accent: #f5c211;
+    --snow: #e8f4fc;
+    --ice: #b8d4e8;
+    --road: #2d3436;
+    --road-line: #f5f5f5;
+    --night-sky: #0f1a2b;
+    --city-bg: #1a2634;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Nunito', sans-serif;
+    background: var(--night-sky);
+    color: white;
+}
+
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* ==================== СТАРТОВЫЙ ЭКРАН ==================== */
+#start-screen {
+    background: linear-gradient(180deg, #0a1628 0%, #1a3a5c 50%, #2d5a7b 100%);
+    padding: 20px;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.logo-car {
+    font-size: 80px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+}
+
+.logo h1 {
+    font-family: 'Russo One', sans-serif;
+    font-size: 48px;
+    line-height: 1.1;
+    background: linear-gradient(180deg, #fff 0%, #a8d5ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+.subtitle {
+    font-size: 18px;
+    color: var(--ice);
+    margin-top: 8px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.btn-play {
+    background: linear-gradient(180deg, var(--accent) 0%, #d4a50e 100%);
+    border: none;
+    padding: 18px 60px;
+    font-size: 22px;
+    font-family: 'Russo One', sans-serif;
+    color: var(--primary-dark);
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(245, 194, 17, 0.4), inset 0 2px 0 rgba(255,255,255,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-play:hover, .btn-play:active {
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(245, 194, 17, 0.5);
+}
+
+.btn-play::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shine 2s infinite;
+}
+
+@keyframes shine {
+    0% { left: -100%; }
+    50%, 100% { left: 100%; }
+}
+
+.instructions {
+    margin-top: 30px;
+    text-align: center;
+    color: var(--ice);
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.instructions p {
+    margin: 5px 0;
+}
+
+.high-score {
+    margin-top: 25px;
+    padding: 12px 25px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    font-size: 16px;
+    color: var(--accent);
+}
+
+/* ==================== СНЕЖИНКИ ==================== */
+.snowflakes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.snowflake {
+    position: absolute;
+    top: -20px;
+    color: white;
+    font-size: 20px;
+    opacity: 0.8;
+    animation: fall linear infinite;
+}
+
+.snowflake:nth-child(1) { left: 5%; animation-duration: 8s; animation-delay: 0s; font-size: 24px; }
+.snowflake:nth-child(2) { left: 15%; animation-duration: 12s; animation-delay: 1s; font-size: 16px; }
+.snowflake:nth-child(3) { left: 30%; animation-duration: 10s; animation-delay: 2s; font-size: 20px; }
+.snowflake:nth-child(4) { left: 45%; animation-duration: 14s; animation-delay: 0.5s; font-size: 18px; }
+.snowflake:nth-child(5) { left: 60%; animation-duration: 9s; animation-delay: 1.5s; font-size: 22px; }
+.snowflake:nth-child(6) { left: 75%; animation-duration: 11s; animation-delay: 3s; font-size: 14px; }
+.snowflake:nth-child(7) { left: 85%; animation-duration: 13s; animation-delay: 2.5s; font-size: 26px; }
+.snowflake:nth-child(8) { left: 95%; animation-duration: 7s; animation-delay: 0.8s; font-size: 16px; }
+
+@keyframes fall {
+    0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0.3;
+    }
+}
+
+/* ==================== ИГРОВОЙ ЭКРАН ==================== */
+#game-screen {
+    background: var(--night-sky);
+}
+
+#game-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 450px;
+    overflow: hidden;
+    touch-action: pan-y;
+}
+
+/* HUD */
+.game-hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    z-index: 100;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 100%);
+}
+
+.odometer, .speed {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Russo One', sans-serif;
+    font-size: 18px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.odometer-icon, .speed-icon {
+    font-size: 20px;
+}
+
+/* Фон города */
+.city-bg {
+    position: absolute;
+    bottom: 25%;
+    left: 0;
+    width: 200%;
+    height: 200px;
+    background: 
+        /* Здания ближние */
+        repeating-linear-gradient(90deg,
+            var(--city-bg) 0px, var(--city-bg) 40px,
+            #243342 40px, #243342 45px,
+            #1e2d3a 45px, #1e2d3a 100px,
+            #2a3f4f 100px, #2a3f4f 130px,
+            var(--city-bg) 130px, var(--city-bg) 180px
+        ),
+        /* Окна */
+        repeating-linear-gradient(90deg,
+            transparent 0px, transparent 50px,
+            rgba(255, 220, 100, 0.3) 52px, rgba(255, 220, 100, 0.3) 56px,
+            transparent 58px, transparent 100px
+        );
+    animation: cityScroll 8s linear infinite;
+}
+
+.city-bg-2 {
+    bottom: 30%;
+    height: 150px;
+    opacity: 0.5;
+    animation: cityScroll 15s linear infinite;
+}
+
+@keyframes cityScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Дорога */
+.road {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 350px;
+    height: 70%;
+    background: linear-gradient(180deg, 
+        #1a1a1a 0%, 
+        var(--road) 20%,
+        var(--road) 100%
+    );
+    perspective: 150px;
+    overflow: hidden;
+}
+
+.road::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    right: -20px;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+        #3a4a5a 0%, #3a4a5a 15px,
+        transparent 15px, transparent calc(100% - 15px),
+        #3a4a5a calc(100% - 15px), #3a4a5a 100%
+    );
+}
+
+/* Снег по бокам дороги */
+.road::after {
+    content: '';
+    position: absolute;
+    left: -40px;
+    right: -40px;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+        var(--snow) 0%, var(--snow) 25px,
+        transparent 35px, transparent calc(100% - 35px),
+        var(--snow) calc(100% - 25px), var(--snow) 100%
+    );
+    opacity: 0.9;
+}
+
+.road-lines {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 8px;
+    height: 200%;
+    transform: translateX(-50%);
+    background: repeating-linear-gradient(
+        180deg,
+        var(--road-line) 0px, var(--road-line) 40px,
+        transparent 40px, transparent 80px
+    );
+    animation: roadMove 0.5s linear infinite;
+}
+
+@keyframes roadMove {
+    0% { transform: translateX(-50%) translateY(0); }
+    100% { transform: translateX(-50%) translateY(80px); }
+}
+
+/* ==================== МАШИНА ИГРОКА ==================== */
+.car {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 100px;
+    z-index: 50;
+    transition: left 0.15s ease-out;
+}
+
+.car-body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.car-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 65%;
+    background: linear-gradient(180deg, #c0392b 0%, #922b21 100%);
+    border-radius: 8px 8px 5px 5px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+}
+
+.car-top {
+    position: absolute;
+    top: 10px;
+    left: 8px;
+    width: calc(100% - 16px);
+    height: 40%;
+    background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
+    border-radius: 5px 5px 0 0;
+}
+
+.car-windows {
+    position: absolute;
+    top: 15px;
+    left: 12px;
+    width: calc(100% - 24px);
+    height: 30%;
+    background: linear-gradient(180deg, #85c1e9 0%, #5dade2 100%);
+    border-radius: 3px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.car-lights {
+    position: absolute;
+    top: 0;
+    left: 5px;
+    right: 5px;
+    height: 8px;
+    background: linear-gradient(90deg, 
+        var(--accent) 0%, var(--accent) 25%,
+        transparent 25%, transparent 75%,
+        var(--accent) 75%, var(--accent) 100%
+    );
+    border-radius: 2px;
+    box-shadow: 0 0 10px var(--accent);
+}
+
+.car-wheels {
+    position: absolute;
+    bottom: 5px;
+    left: -5px;
+    right: -5px;
+    height: 15px;
+}
+
+.wheel {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #1a1a1a;
+    border-radius: 50%;
+    border: 2px solid #444;
+}
+
+.wheel-left { left: 0; }
+.wheel-right { right: 0; }
+
+/* ==================== СУГРОБЫ ==================== */
+.obstacle {
+    position: absolute;
+    width: 70px;
+    height: 45px;
+    z-index: 40;
+    animation: obstacleMove linear forwards;
+}
+
+.snowdrift {
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center bottom, 
+        var(--snow) 0%, 
+        var(--ice) 60%,
+        #a8c8dc 100%
+    );
+    border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+    box-shadow: 
+        inset -5px -5px 10px rgba(255,255,255,0.8),
+        inset 5px 5px 10px rgba(150, 180, 200, 0.3),
+        0 5px 15px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.snowdrift::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 15%;
+    width: 40%;
+    height: 30%;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+    filter: blur(3px);
+}
+
+.snowdrift::after {
+    content: '❄';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    opacity: 0.5;
+}
+
+@keyframes obstacleMove {
+    0% {
+        top: -60px;
+        transform: scale(0.5);
+    }
+    100% {
+        top: 100%;
+        transform: scale(1);
+    }
+}
+
+/* Эффект снега в игре */
+.snow-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background-image: 
+        radial-gradient(2px 2px at 20px 30px, white, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, white, transparent),
+        radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 160px 120px, white, transparent);
+    background-size: 200px 200px;
+    animation: snowFall 3s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes snowFall {
+    0% { background-position: 0 0; }
+    100% { background-position: 100px 200px; }
+}
+
+/* ==================== МОБИЛЬНОЕ УПРАВЛЕНИЕ ==================== */
+.mobile-controls {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 100;
+}
+
+.control-btn {
+    width: 80px;
+    height: 80px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(5px);
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.control-btn:active {
+    transform: scale(0.9);
+    background: rgba(255,255,255,0.3);
+}
+
+/* ==================== GAME OVER ==================== */
+#gameover-screen {
+    background: linear-gradient(180deg, #1a0a0a 0%, #2d1515 50%, #0f1a2b 100%);
+}
+
+.gameover-content {
+    text-align: center;
+    padding: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.gameover-content h2 {
+    font-family: 'Russo One', sans-serif;
+    font-size: 36px;
+    color: #ff6b6b;
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px rgba(255, 100, 100, 0.5);
+}
+
+.final-stats {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.stat {
+    background: rgba(255,255,255,0.1);
+    padding: 20px 25px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--ice);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    font-family: 'Russo One', sans-serif;
+    font-size: 32px;
+    color: var(--accent);
+}
+
+.stat-unit {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+}
+
+.new-record {
+    font-family: 'Russo One', sans-serif;
+    font-size: 20px;
+    color: var(--accent);
+    margin-bottom: 25px;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.btn-share {
+    display: block;
+    margin: 15px auto 0;
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.3);
+    padding: 12px 30px;
+    font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-share:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.5);
+}
+
+/* ==================== АДАПТИВНОСТЬ ==================== */
+@media (max-width: 380px) {
+    .logo h1 {
+        font-size: 36px;
+    }
+    
+    .btn-play {
+        padding: 15px 45px;
+        font-size: 18px;
+    }
+    
+    .control-btn {
+        width: 65px;
+        height: 65px;
+        font-size: 26px;
+    }
+    
+    .final-stats {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media (min-height: 800px) {
+    .logo {
+        margin-bottom: 60px;
+    }
+    
+    .car {
+        bottom: 120px;
+    }
+}
+

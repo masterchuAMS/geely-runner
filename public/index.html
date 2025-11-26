@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Geely Runner - Зимний Город</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Стартовый экран -->
+    <div id="start-screen" class="screen">
+        <div class="snowflakes" aria-hidden="true">
+            <div class="snowflake">❄</div>
+            <div class="snowflake">❅</div>
+            <div class="snowflake">❆</div>
+            <div class="snowflake">❄</div>
+            <div class="snowflake">❅</div>
+            <div class="snowflake">❆</div>
+            <div class="snowflake">❄</div>
+            <div class="snowflake">❅</div>
+        </div>
+        <div class="logo">
+            <div class="logo-car">🚗</div>
+            <h1>GEELY<br>RUNNER</h1>
+            <p class="subtitle">Зимний Город</p>
+        </div>
+        <button id="start-btn" class="btn-play">
+            <span>ИГРАТЬ</span>
+        </button>
+        <div class="instructions">
+            <p>← Свайп или кнопки →</p>
+            <p>Избегай сугробов!</p>
+        </div>
+        <div class="high-score" id="high-score-display">
+            Рекорд: <span id="record">0</span> м
+        </div>
+    </div>
+
+    <!-- Игровой экран -->
+    <div id="game-screen" class="screen hidden">
+        <div class="game-hud">
+            <div class="odometer">
+                <span class="odometer-icon">📏</span>
+                <span id="distance">0</span> м
+            </div>
+            <div class="speed">
+                <span class="speed-icon">⚡</span>
+                <span id="speed">60</span> км/ч
+            </div>
+        </div>
+        
+        <div id="game-container">
+            <!-- Фон города -->
+            <div class="city-bg"></div>
+            <div class="city-bg city-bg-2"></div>
+            
+            <!-- Дорога -->
+            <div class="road">
+                <div class="road-lines"></div>
+            </div>
+            
+            <!-- Машина игрока -->
+            <div id="player-car" class="car">
+                <div class="car-body">
+                    <div class="car-top"></div>
+                    <div class="car-windows"></div>
+                    <div class="car-bottom"></div>
+                    <div class="car-lights"></div>
+                    <div class="car-wheels">
+                        <div class="wheel wheel-left"></div>
+                        <div class="wheel wheel-right"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Контейнер для сугробов -->
+            <div id="obstacles-container"></div>
+            
+            <!-- Эффект снега -->
+            <div class="snow-effect"></div>
+        </div>
+        
+        <!-- Мобильное управление -->
+        <div class="mobile-controls">
+            <button id="btn-left" class="control-btn">◀</button>
+            <button id="btn-right" class="control-btn">▶</button>
+        </div>
+    </div>
+
+    <!-- Экран Game Over -->
+    <div id="gameover-screen" class="screen hidden">
+        <div class="snowflakes" aria-hidden="true">
+            <div class="snowflake">❄</div>
+            <div class="snowflake">❅</div>
+            <div class="snowflake">❆</div>
+            <div class="snowflake">❄</div>
+        </div>
+        <div class="gameover-content">
+            <h2>💥 АВАРИЯ!</h2>
+            <div class="final-stats">
+                <div class="stat">
+                    <span class="stat-label">Пройдено</span>
+                    <span class="stat-value" id="final-distance">0</span>
+                    <span class="stat-unit">метров</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Макс. скорость</span>
+                    <span class="stat-value" id="final-speed">0</span>
+                    <span class="stat-unit">км/ч</span>
+                </div>
+            </div>
+            <div class="new-record hidden" id="new-record">
+                🏆 НОВЫЙ РЕКОРД! 🏆
+            </div>
+            <button id="restart-btn" class="btn-play">
+                <span>ЕЩЁ РАЗ</span>
+            </button>
+            <button id="share-btn" class="btn-share">
+                📤 Поделиться результатом
+            </button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
+

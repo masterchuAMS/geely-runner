@@ -1,0 +1,17 @@
+{
+  "name": "geely-runner-backend",
+  "version": "1.0.0",
+  "description": "Игра Geely Runner для Telegram Mini App - объезжай сугробы!",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
